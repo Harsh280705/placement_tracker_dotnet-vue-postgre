@@ -1,0 +1,49 @@
+@model List<PlacementTracker.Models.Application>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-head">
+    <h1>Applications</h1>
+    <a class="btn btn-primary" href="/applications/new">+ Add Application</a>
+</div>
+
+@if (Model is null || Model.Count == 0)
+{
+    <section class="card empty">
+        <h2>No applications yet</h2>
+        <p>You have not tracked any applications. Add your first one to get started.</p>
+        <p><a class="btn btn-primary" href="/applications/new">Add Application</a></p>
+    </section>
+}
+else
+{
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Company</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Applied Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var app in Model)
+            {
+                <tr>
+                    <td>@app.Company</td>
+                    <td>@app.Role</td>
+                    <td><span class="badge badge-@app.Status.ToLower()">@app.Status</span></td>
+                    <td>@(app.AppliedOn.HasValue ? app.AppliedOn.Value.ToString("dd MMM yyyy") : "-")</td>
+                    <td class="actions">
+                        <a class="btn btn-small" href="/applications/@app.Id">View</a>
+                        <a class="btn btn-small" href="/applications/@app.Id/edit">Edit</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

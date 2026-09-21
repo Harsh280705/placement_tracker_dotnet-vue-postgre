@@ -1,0 +1,60 @@
+@model PlacementTracker.Models.Application
+@{
+    ViewData["Title"] = "Add Application";
+}
+
+<h1>Add Application</h1>
+
+<div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+<form action="/applications" method="post" class="card">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Company"></label>
+        <input asp-for="Company" type="text" placeholder="e.g. Acme Labs" />
+        <span asp-validation-for="Company" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Role"></label>
+        <input asp-for="Role" type="text" placeholder="e.g. Backend Intern" />
+        <span asp-validation-for="Role" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status">
+            <option value="Wishlist">Wishlist</option>
+            <option value="Applied">Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        <span asp-validation-for="Status" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AppliedOn"></label>
+        <input asp-for="AppliedOn" type="date" />
+        <div class="hint">Required unless status is Wishlist.</div>
+        <span asp-validation-for="AppliedOn" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="JobUrl"></label>
+        <input asp-for="JobUrl" type="url" placeholder="https://example.com/job" />
+        <span asp-validation-for="JobUrl" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea asp-for="Notes" maxlength="1000" placeholder="Optional notes (max 1000 characters)"></textarea>
+        <span asp-validation-for="Notes" class="field-error"></span>
+    </div>
+
+    <div class="button-row">
+        <button type="submit" class="btn btn-primary">Save Application</button>
+        <a class="btn" href="/">Cancel</a>
+    </div>
+</form>
