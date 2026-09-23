@@ -93,6 +93,35 @@ dotnet test tests/PlacementTracker.Api.Tests.csproj
 ```
 
 Tests use isolated InMemory databases and do not modify the real PostgreSQL database.
+<<<<<<< HEAD
+=======
+
+## Run with Docker
+
+```powershell
+docker compose up --build
+```
+
+Application:
+
+```text
+http://localhost:8080
+```
+
+NGINX (`:8080`) routes `/` to the frontend container and `/api/` to the API container, which uses the `postgres` service. Data persists in a Docker volume across `docker compose down` / `docker compose up` (do not use `down -v` unless you want to reset the database).
+
+Stop:
+
+```powershell
+docker compose down
+```
+
+Public access:
+
+```powershell
+ngrok http 8080
+```
+>>>>>>> 3403556 (Added docker)
 
 ## API Endpoints
 
