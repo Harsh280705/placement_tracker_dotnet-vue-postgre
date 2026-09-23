@@ -93,8 +93,6 @@ dotnet test tests/PlacementTracker.Api.Tests.csproj
 ```
 
 Tests use isolated InMemory databases and do not modify the real PostgreSQL database.
-<<<<<<< HEAD
-=======
 
 ## Run with Docker
 
@@ -121,7 +119,6 @@ Public access:
 ```powershell
 ngrok http 8080
 ```
->>>>>>> 3403556 (Added docker)
 
 ## API Endpoints
 
