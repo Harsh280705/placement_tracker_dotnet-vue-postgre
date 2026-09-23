@@ -130,28 +130,8 @@ ngrok http 8080
 | PUT    | `/api/applications/{id}` | Update  |
 | DELETE | `/api/applications/{id}` | Delete  |
 
-## ngrok
 
-After the local application is working through NGINX:
-
-```powershell
-ngrok config add-authtoken <YOUR_TOKEN>
 ngrok http 8080
-```
-
-Open the HTTPS URL provided by ngrok.
-
-```text
-Internet
-   ↓
-ngrok
-   ↓
-NGINX :8080
-   ↓
-Vue + ASP.NET Core API
-   ↓
-PostgreSQL
-```
 
 **Important:** Expose port `8080` through ngrok, not `5173` or `5038`.
 
