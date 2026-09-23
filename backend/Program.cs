@@ -22,13 +22,18 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// CORS: allow the Vue dev server to call the API.
+// CORS: allow the Vue dev server and the NGINX entry point to call the API.
+// http://localhost:8080 is required because browsers load the app from the
+// NGINX origin; any cross-origin request from that origin (absolute-URL API
+// calls, Swagger/tooling, non-simple requests) would otherwise be rejected.
+// Same-origin /api requests proxied by NGINX need no CORS headers, but the
+// allow-list entry makes :8080 a first-class origin. :5173 is unchanged.
 const string VueDevPolicy = "VueDev";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(VueDevPolicy, policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "http://localhost:8080")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
