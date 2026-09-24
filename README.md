@@ -145,5 +145,3 @@ ngrok http 8080
 | NGINX            |             8080 |
 | ngrok            | Public HTTPS URL |
 
-```
-```
