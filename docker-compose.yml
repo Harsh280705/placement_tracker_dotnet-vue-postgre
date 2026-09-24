@@ -1,10 +1,17 @@
-# Placement Tracker — full stack via Docker.
+# Placement Tracker — full stack in ONE container.
 # Start:  docker compose up --build
 # App:    http://localhost:8080
 # Stop:   docker compose down   (no -v: keeps the pgdata volume)
+#
+# Single service `app` runs NGINX (:8080, public entry) + ASP.NET Core API
+# (127.0.0.1:5038, internal) + PostgreSQL 16 (127.0.0.1:5432, internal) +
+# the Vue production bundle (served by NGINX as static files).
+# Data persists in the same `pgdata` volume at /var/lib/postgresql/data.
 services:
-  postgres:
-    image: postgres:16
+  app:
+    build: .
+    ports:
+      - "8080:8080"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-placement_tracker}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -12,33 +19,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres}"]
-      interval: 5s
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8080/api/applications || exit 1"]
+      interval: 10s
       timeout: 5s
       retries: 10
-
-  backend:
-    build: ./backend
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__Default: Host=postgres;Port=5432;Database=${POSTGRES_DB:-placement_tracker};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  frontend:
-    build: ./frontend
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./nginx/docker.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - frontend
-      - backend
+      start_period: 60s
 
 volumes:
   pgdata:

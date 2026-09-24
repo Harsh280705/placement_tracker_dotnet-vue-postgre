@@ -1,0 +1,13 @@
+# Single-container build context: keep the daemon upload small.
+# (Per-service .dockerignore files only applied when their folders were the
+# build context; with the root Dockerfile the root .dockerignore governs.)
+.git/
+backend/bin/
+backend/obj/
+frontend/node_modules/
+frontend/dist/
+tests/bin/
+tests/obj/
+tests/TestResults/
+nginx/logs/
+nginx/temp/
